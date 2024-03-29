@@ -14,21 +14,10 @@ public class JpaMain {
         tx.begin();
 
         try {
-            // 비영속
-            Member member = new Member();
-            member.setId(101L);
-            member.setName("HelloJPA");
-
-            // 영속
-            System.out.println("=== BEFORE ===");
-            em.persist(member);
-            System.out.println("=== AFTER ===");
-
-            Member findMember = em.find(Member.class, 101L);
-            // 조회를 했는데 Select 쿼리가 안나감?
-            // DB에서 찾아오지 않고, 1차 캐시에서 가져오기 때문!
-            System.out.println("findMember.getId() = " + findMember.getId());
-            System.out.println("findMember.getName() = " + findMember.getName());
+            // 첫번째 조회할 때는 DB에서 SELECT해오는 쿼리가 나와야 함
+            Member findMember1 = em.find(Member.class, 101L);
+            // 두번째 조회할 때는 캐시에 있는 것을 가져오므로 쿼리가 나오면 안됨
+            Member findMember2 = em.find(Member.class, 101L);
 
             tx.commit(); // DB에 쿼리가 날아가는 시점
         } catch (Exception e) {
