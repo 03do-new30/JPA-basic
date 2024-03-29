@@ -14,14 +14,14 @@ public class JpaMain {
         tx.begin();
 
         try {
-            Member member = em.find(Member.class, 150L); // 원래 이름이 A인 데이터
-            member.setName("ZZZZZ");
+            Member member = new Member(200L, "member200");
+            em.persist(member);
 
-//            em.persist(member); -> 쓰면 안되고 쓸 필요 없다
-            System.out.println("===============");
-            // UPDATE 쿼리 날아가는 것 확인 할 수 있음
+            em.flush(); // 쿼리가 날아가는 시점
 
-            tx.commit(); // DB에 쿼리가 날아가는 시점
+            System.out.println("==========");
+
+            tx.commit();
         } catch (Exception e) {
             tx.rollback();
         } finally {
