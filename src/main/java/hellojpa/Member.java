@@ -9,6 +9,14 @@ public class Member {
     private Long id;
     private String name;
 
+    // JPA를 위한 기본 생성자
+    public Member() {}
+
+    public Member(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public long getId() {
         return id;
     }

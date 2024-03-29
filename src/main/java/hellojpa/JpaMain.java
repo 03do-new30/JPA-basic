@@ -14,13 +14,12 @@ public class JpaMain {
         tx.begin();
 
         try {
-            // 첫번째 조회할 때는 DB에서 SELECT해오는 쿼리가 나와야 함
-            Member findMember1 = em.find(Member.class, 101L);
-            // 두번째 조회할 때는 캐시에 있는 것을 가져오므로 쿼리가 나오면 안됨
-            Member findMember2 = em.find(Member.class, 101L);
+            Member member1 = new Member(150L, "A");
+            Member member2 = new Member(160L, "B");
 
-            // 영속 엔티티의 동일성 보장
-            System.out.println("result = " + (findMember1 == findMember2));
+            em.persist(member1);
+            em.persist(member2);
+            System.out.println("===== 바로 INSERT 쿼리가 날아가지 않음 =====");
 
             tx.commit(); // DB에 쿼리가 날아가는 시점
         } catch (Exception e) {
