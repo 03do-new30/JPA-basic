@@ -18,11 +18,11 @@ public class JpaMain {
             member.setUsername("C");
 
             System.out.println("================");
-            em.persist(member); // IDENTITY 전략 -> persist시점에 INSERT쿼리 날아감 (PK값이 INSERT 후에 얻어지기때문)
+            em.persist(member); // SEQUENCE 전략 - 영속성 컨텍스트 관리 위해 persist 시점에 SEQUENCE에서 다음 값을 얻어옴
             System.out.println("member.getId() = " + member.getId());
             System.out.println("================");
 
-            tx.commit();
+            tx.commit(); // 커밋 시점에 INSERT (버퍼링 가능)
         } catch (Exception e) {
             tx.rollback();
         } finally {
