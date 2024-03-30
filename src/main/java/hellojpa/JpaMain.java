@@ -15,11 +15,13 @@ public class JpaMain {
 
         try {
             Member member = new Member();
-            member.setId(1L);
-            member.setUsername("A");
-            member.setRoleType(RoleType.ADMIN);
+            member.setUsername("C");
 
-            em.persist(member);
+            System.out.println("================");
+            em.persist(member); // IDENTITY 전략 -> persist시점에 INSERT쿼리 날아감 (PK값이 INSERT 후에 얻어지기때문)
+            System.out.println("member.getId() = " + member.getId());
+            System.out.println("================");
+
             tx.commit();
         } catch (Exception e) {
             tx.rollback();
