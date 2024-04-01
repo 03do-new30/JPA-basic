@@ -16,26 +16,19 @@ public class JpaMain {
         tx.begin();
 
         try {
-            // 저장
-            Team team = new Team();
-            team.setName("teamA");
-            em.persist(team);
-
             Member member = new Member();
             member.setUsername("member1");
-            member.changeTeam(team); // 연관관계의 주인에 값을 입력
+
             em.persist(member);
 
-//            em.flush();
-//            em.clear();
+            Team team = new Team();
+            team.setName("teamA");
 
-            Team findTeam = em.find(Team.class, team.getId()); // flush, clear 하지 않으면 현재 1차 캐시에만 올라가있는 값 (순수한 객체 상태)
-            List<Member> members = findTeam.getMembers(); // flush, clear 하지 않으면 members의 값이 없을 것임
-            System.out.println("====================");
-            for (Member m : members) {
-                System.out.println("m = " + m.getUsername());
-            }
-            System.out.println("====================");
+            // Member 테이블이 update된다
+            // Team 엔티티를 만졌는데 Member 테이블이 update되는 건 좋지 않음
+            team.getMembers().add(member);
+
+            em.persist(team);
 
             tx.commit(); // 커밋 시점에 INSERT (버퍼링 가능)
         } catch (Exception e) {

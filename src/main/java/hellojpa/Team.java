@@ -11,11 +11,10 @@ public class Team {
     @GeneratedValue
     @Column(name = "TEAM_ID")
     private Long id;
-
     private String name;
 
-    @OneToMany(mappedBy = "team")
-    // mappedBy는 가짜매핑! JPA에서 insert, update 신경쓰지 않는다
+    @OneToMany
+    @JoinColumn(name = "TEAM_ID") // 일대다
     private List<Member> members = new ArrayList<>();
 
     public Long getId() {
