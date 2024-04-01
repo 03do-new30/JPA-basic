@@ -32,9 +32,7 @@ public class JpaMain {
             Team findTeam = em.find(Team.class, team.getId()); // flush, clear 하지 않으면 현재 1차 캐시에만 올라가있는 값 (순수한 객체 상태)
             List<Member> members = findTeam.getMembers(); // flush, clear 하지 않으면 members의 값이 없을 것임
             System.out.println("====================");
-            for (Member m : members) {
-                System.out.println("m = " + m.getUsername());
-            }
+            System.out.println("members = " + findTeam);
             System.out.println("====================");
 
             tx.commit(); // 커밋 시점에 INSERT (버퍼링 가능)

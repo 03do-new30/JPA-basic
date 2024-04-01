@@ -52,4 +52,13 @@ public class Member {
         // 연관관계 편의 메소드
         team.getMembers().add(this);
     }
+
+    @Override
+    public String toString() {
+        return "Member{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", team=" + team + // team의 toString을 호출 (무한)
+                '}';
+    }
 }
