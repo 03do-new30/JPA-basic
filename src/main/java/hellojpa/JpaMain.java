@@ -23,10 +23,8 @@ public class JpaMain {
 
             Member member = new Member();
             member.setUsername("member1");
-            member.setTeam(team); // 연관관계의 주인에 값을 입력
+            member.changeTeam(team); // 연관관계의 주인에 값을 입력
             em.persist(member);
-
-            team.getMembers().add(member); // 순수한 객체 관계를 고려하면 항상 양쪽 다 값을 입력해야 한다
 
 //            em.flush();
 //            em.clear();
