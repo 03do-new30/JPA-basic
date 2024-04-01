@@ -15,6 +15,7 @@ public class Team {
     private String name;
 
     @OneToMany(mappedBy = "team")
+    // mappedBy는 가짜매핑! JPA에서 insert, update 신경쓰지 않는다
     private List<Member> members = new ArrayList<>();
 
     public Long getId() {
