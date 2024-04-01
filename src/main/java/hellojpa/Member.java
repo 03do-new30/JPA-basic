@@ -21,7 +21,7 @@ public class Member {
     @Column(name = "USERNAME")
     private String username;
 
-//    @Column(name = "TEAM_ID")
+    //    @Column(name = "TEAM_ID")
 //    private Long teamId;
     @ManyToOne
     @JoinColumn(name = "TEAM_ID")
@@ -51,14 +51,5 @@ public class Member {
         this.team = team;
         // 연관관계 편의 메소드
         team.getMembers().add(this);
-    }
-
-    @Override
-    public String toString() {
-        return "Member{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", team=" + team + // team의 toString을 호출 (무한)
-                '}';
     }
 }
