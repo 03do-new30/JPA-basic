@@ -16,19 +16,19 @@ public class JpaMain {
         tx.begin();
 
         try {
-            Member member = new Member();
-            member.setUsername("member1");
+            Movie movie = new Movie();
+            movie.setDirector("aaaa");
+            movie.setActor("bbbb");
+            movie.setName("바람과함께사라지다");
+            movie.setPrice(10000);
 
-            em.persist(member);
+            em.persist(movie);
 
-            Team team = new Team();
-            team.setName("teamA");
+            em.flush();
+            em.clear(); // 영속성 컨텍스트 깔끔하게 지움
 
-            // Member 테이블이 update된다
-            // Team 엔티티를 만졌는데 Member 테이블이 update되는 건 좋지 않음
-            team.getMembers().add(member);
-
-            em.persist(team);
+            Movie findMovie = em.find(Movie.class, movie.getId()); // join으로 가져옴
+            System.out.println("findMovie = " + findMovie);
 
             tx.commit(); // 커밋 시점에 INSERT (버퍼링 가능)
         } catch (Exception e) {
