@@ -13,7 +13,7 @@ import java.util.List;
         name = "MEMBER_SEQ_GENERATOR",
         sequenceName = "MEMBER_SEQ", // 매핑할 DB 시퀀스 이름
         initialValue = 1, allocationSize = 50)
-public class Member {
+public class Member extends BaseEntity {
 
     @Id
     @GeneratedValue
@@ -35,6 +35,12 @@ public class Member {
 
     @OneToMany(mappedBy = "member")
     private List<MemberProduct> memberProducts = new ArrayList<>();
+
+    // 모든 엔티티의 공통 속성 -> BaseEntity로
+//    private String createdBy;
+//    private LocalDateTime createdDate;
+//    private String lastModifiedBy;
+//    private LocalDateTime lastModifiedDate;
 
     public Long getId() {
         return id;
