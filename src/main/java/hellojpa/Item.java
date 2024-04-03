@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn
+// 단일 테이블 전략은 @DiscriminatorColumn 없어도 DTYPE 컬럼이 생긴다
 public class Item {
 
     @Id @GeneratedValue
