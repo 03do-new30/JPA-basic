@@ -29,11 +29,14 @@ public class JpaMain {
             em.flush();
             em.clear(); // 영속성 컨텍스트 깔끔하게
 
-            Member m1 = em.find(Member.class, member1.getId());
-            Member m2 = em.getReference(Member.class, member2.getId());
+            Member m1 = em.find(Member.class, member1.getId()); // 영속성 컨텍스트에 올라감
+            System.out.println("m1.getClass() = " + m1.getClass());
 
-            logic(m1, m2);
+            Member reference = em.getReference(Member.class, member1.getId());
+            // 영속성 컨텍스트에 찾는 엔티티가 이미 있으면 em.getReference()를 호출해도 실제 엔티티 반환
+            System.out.println("reference.getClass() = " + reference.getClass());
 
+            System.out.println("JPA, 트랜잭션에서 a == a 보장: " + (m1 == reference));
 
             tx.commit(); // 커밋 시점에 INSERT (버퍼링 가능)
         } catch (Exception e) {
@@ -42,11 +45,5 @@ public class JpaMain {
             em.close(); // 영속성 컨텍스트를 종료
         }
         emf.close();
-    }
-
-    private static void logic(Member m1, Member m2) {
-        System.out.println("m1 == m2 " + (m1.getClass() == m2.getClass()));
-        System.out.println("m1 instanceof Member " + (m1 instanceof Member));
-        System.out.println("m2 instanceof Member " + (m2 instanceof Member));
     }
 }
