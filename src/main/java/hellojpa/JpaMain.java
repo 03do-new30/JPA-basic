@@ -42,13 +42,8 @@ public class JpaMain {
 
 //            Member m = em.find(Member.class, member1.getId());
 
-            // N + 1 PROBLEM
-            // 즉시 로딩 시, JPQL 쓰면 쿼리가 여러번 나간다
-            // 1. SQL로 변환(SELECT * FROM MEMBER)해서, MEMBER 테이블을 쭉 가져온다
-            // 2. 어라? MEMBER 가져왔더니 Team이 즉시로딩으로 되어있네? 이를 위한 쿼리가 별도로 나감
-            // (SELECT * FROM TEAM WHERE TEAM_ID = team1의 아이디)
-            // (SELECT * FROM TEAM WHERE TEAM_ID = team2의 아이디) ...
-            List<Member> members = em.createQuery("select m from Member m", Member.class).getResultList();
+            // N + 1 PROBLEM 해결하는 JPQL
+            List<Member> members = em.createQuery("select m from Member m join fetch m.team", Member.class).getResultList();
 
 
             tx.commit(); // 커밋 시점에 INSERT (버퍼링 가능)
