@@ -23,10 +23,8 @@ public class Member extends BaseEntity {
     @Column(name = "USERNAME")
     private String username;
 
-    @ManyToOne
-    @JoinColumn(name = "TEAM_ID", insertable = false, updatable = false) // 일대다 양방향
-    // 일대다에서 연관관계의 주인처럼 보이지 않기 위해서 insertable = false, updatable = false
-    // 읽기 전용으로. 업데이트 안하게끔.
+    @ManyToOne(fetch = FetchType.LAZY) // Member class만 DB에서 조회한다
+    @JoinColumn(name = "TEAM_ID")
     private Team team;
 
     // 모든 엔티티의 공통 속성 -> BaseEntity로
@@ -49,5 +47,13 @@ public class Member extends BaseEntity {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
     }
 }

@@ -19,28 +19,26 @@ public class JpaMain {
 
         try {
 
+            Team team = new Team();
+            team.setName("teamA");
+            em.persist(team);
+
             Member member1 = new Member();
             member1.setUsername("member1");
+            member1.setTeam(team);
             em.persist(member1);
 
-            Member member2 = new Member();
-            member2.setUsername("member2");
-            em.persist(member2);
-
             em.flush();
-            em.clear(); // 영속성 컨텍스트 깔끔하게
+            em.clear();
 
-            Member refMember = em.getReference(Member.class, member1.getId());
-            System.out.println("refMember.getClass() = " + refMember.getClass()); // Proxy
+            Member m = em.find(Member.class, member1.getId());
+            System.out.println("m.getClass() = " + m.getClass());
+            System.out.println("m.getTeam().getClass() = " + m.getTeam().getClass()); // Team을 Proxy로 기져옴
+            System.out.println("========================================");
+            // 실제로 Team의 값을 사용하는 경우에 Proxy 초기화, 이때 쿼리 나감
+            System.out.println("m.getTeam().getName() = " + m.getTeam().getName());
+            System.out.println("========================================");
 
-            // 프록시 인스턴스의 초기화 여부 확인
-            System.out.println("isLoaded = " + emf.getPersistenceUnitUtil().isLoaded(refMember));
-            refMember.getUsername(); // 강제 초기화
-//            Hibernate.initialize(refMember); // 강제 초기화 (Hibernate가 제공하는 것, JPA 표준에는 없음)
-            System.out.println("isLoaded = " + emf.getPersistenceUnitUtil().isLoaded(refMember));
-
-            // 프록시 클래스 확인 방법
-            System.out.println("refMember.getClass() = " + refMember.getClass());
 
             tx.commit(); // 커밋 시점에 INSERT (버퍼링 가능)
         } catch (Exception e) {
