@@ -18,21 +18,22 @@ public class JpaMain {
 
         try {
 
-            Member member = new Member();
-            member.setUsername("hello");
+            Member member1 = new Member();
+            member1.setUsername("member1");
+            em.persist(member1);
 
-            em.persist(member);
+            Member member2 = new Member();
+            member2.setUsername("member2");
+            em.persist(member2);
 
             em.flush();
             em.clear(); // 영속성 컨텍스트 깔끔하게
 
-//            Member findMember = em.find(Member.class, member.getId());
-            Member findMember = em.getReference(Member.class, member.getId()); // 호출 시점에는 쿼리하지 않음
-            System.out.println("before  findMember = " + findMember.getClass()); // Member$HibernateProxy
-            // 프록시 객체 초기화
-            System.out.println("findMember.getUsername() = " + findMember.getUsername());
-            // 프록시 객체가 실제 엔티티로 바뀌는 것은 아님
-            System.out.println("after   findMember = " + findMember.getClass()); // Member$HibernateProxy
+            Member m1 = em.find(Member.class, member1.getId());
+            Member m2 = em.getReference(Member.class, member2.getId());
+
+            logic(m1, m2);
+
 
             tx.commit(); // 커밋 시점에 INSERT (버퍼링 가능)
         } catch (Exception e) {
@@ -41,5 +42,11 @@ public class JpaMain {
             em.close(); // 영속성 컨텍스트를 종료
         }
         emf.close();
+    }
+
+    private static void logic(Member m1, Member m2) {
+        System.out.println("m1 == m2 " + (m1.getClass() == m2.getClass()));
+        System.out.println("m1 instanceof Member " + (m1 instanceof Member));
+        System.out.println("m2 instanceof Member " + (m2 instanceof Member));
     }
 }
