@@ -33,9 +33,8 @@ public class JpaMain {
 
             Member m = em.find(Member.class, member1.getId());
             System.out.println("m.getClass() = " + m.getClass());
-            System.out.println("m.getTeam().getClass() = " + m.getTeam().getClass()); // Team을 Proxy로 기져옴
+            System.out.println("m.getTeam().getClass() = " + m.getTeam().getClass());
             System.out.println("========================================");
-            // 실제로 Team의 값을 사용하는 경우에 Proxy 초기화, 이때 쿼리 나감
             System.out.println("m.getTeam().getName() = " + m.getTeam().getName());
             System.out.println("========================================");
 
