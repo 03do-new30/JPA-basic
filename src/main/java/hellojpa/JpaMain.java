@@ -29,14 +29,15 @@ public class JpaMain {
             em.flush();
             em.clear(); // 영속성 컨텍스트 깔끔하게
 
-            Member m1 = em.find(Member.class, member1.getId()); // 영속성 컨텍스트에 올라감
-            System.out.println("m1.getClass() = " + m1.getClass());
+            Member refMember = em.getReference(Member.class, member1.getId());
+            System.out.println("refMember.getClass() = " + refMember.getClass()); // Proxy
 
-            Member reference = em.getReference(Member.class, member1.getId());
-            // 영속성 컨텍스트에 찾는 엔티티가 이미 있으면 em.getReference()를 호출해도 실제 엔티티 반환
-            System.out.println("reference.getClass() = " + reference.getClass());
+            Member findMember = em.find(Member.class, member1.getId());
+            System.out.println("findMember.getClass() = " + findMember.getClass()); // 헉 얘가 Member가 아니라 Proxy네!
 
-            System.out.println("JPA, 트랜잭션에서 a == a 보장: " + (m1 == reference));
+            // 한번 Proxy로 조회되면 em.find에서 Proxy를 반환한다
+            // 한 컨텍스트 내에서 == 비교 시 같음을 보장하기 위해서
+            System.out.println("(findMember == refMember) = " + (findMember == refMember));
 
             tx.commit(); // 커밋 시점에 INSERT (버퍼링 가능)
         } catch (Exception e) {
