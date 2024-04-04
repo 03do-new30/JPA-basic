@@ -28,10 +28,11 @@ public class JpaMain {
 
 //            Member findMember = em.find(Member.class, member.getId());
             Member findMember = em.getReference(Member.class, member.getId()); // 호출 시점에는 쿼리하지 않음
-            System.out.println("findMember = " + findMember.getClass()); // Member$HibernateProxy
-            System.out.println("findMember.getId() = " + findMember.getId()); // 이미 getId를 알기에 쿼리하지 않음
-            // 값이 실제 사용되는 시점에 쿼리함 !!
+            System.out.println("before  findMember = " + findMember.getClass()); // Member$HibernateProxy
+            // 프록시 객체 초기화
             System.out.println("findMember.getUsername() = " + findMember.getUsername());
+            // 프록시 객체가 실제 엔티티로 바뀌는 것은 아님
+            System.out.println("after   findMember = " + findMember.getClass()); // Member$HibernateProxy
 
             tx.commit(); // 커밋 시점에 INSERT (버퍼링 가능)
         } catch (Exception e) {
