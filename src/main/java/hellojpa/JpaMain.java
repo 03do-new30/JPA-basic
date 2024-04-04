@@ -32,16 +32,17 @@ public class JpaMain {
             Member refMember = em.getReference(Member.class, member1.getId());
             System.out.println("refMember.getClass() = " + refMember.getClass()); // Proxy
 
-            Member findMember = em.find(Member.class, member1.getId());
-            System.out.println("findMember.getClass() = " + findMember.getClass()); // 헉 얘가 Member가 아니라 Proxy네!
+            em.detach(refMember); // 준영속 상태로 만듦
+            // em.close();
+            // em.clear();
 
-            // 한번 Proxy로 조회되면 em.find에서 Proxy를 반환한다
-            // 한 컨텍스트 내에서 == 비교 시 같음을 보장하기 위해서
-            System.out.println("(findMember == refMember) = " + (findMember == refMember));
+            // could not initialize proxy [hellojpa.Member#1] - no Session
+            refMember.getUsername(); // 영속 컨텍스트에서 관리받지 못하게 됨
 
             tx.commit(); // 커밋 시점에 INSERT (버퍼링 가능)
         } catch (Exception e) {
             tx.rollback();
+            e.printStackTrace();
         } finally {
             em.close(); // 영속성 컨텍스트를 종료
         }
