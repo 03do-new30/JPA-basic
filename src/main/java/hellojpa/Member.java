@@ -29,13 +29,6 @@ public class Member extends BaseEntity {
     // 읽기 전용으로. 업데이트 안하게끔.
     private Team team;
 
-    @OneToOne
-    @JoinColumn(name = "LOCKER_ID")
-    private Locker locker;
-
-    @OneToMany(mappedBy = "member")
-    private List<MemberProduct> memberProducts = new ArrayList<>();
-
     // 모든 엔티티의 공통 속성 -> BaseEntity로
 //    private String createdBy;
 //    private LocalDateTime createdDate;
