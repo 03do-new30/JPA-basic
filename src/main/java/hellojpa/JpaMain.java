@@ -17,15 +17,18 @@ public class JpaMain {
         tx.begin();
 
         try {
+
             Member member = new Member();
-            member.setUsername("user1");
-            member.setCreatedBy("Kim");
-            member.setCreatedDate(LocalDateTime.now());
+            member.setUsername("hello");
 
             em.persist(member);
 
             em.flush();
-            em.clear();
+            em.clear(); // 영속성 컨텍스트 깔끔하게
+
+            Member findMember = em.find(Member.class, member.getId());
+            System.out.println("findMember.getId() = " + findMember.getId());
+            System.out.println("findMember.getUsername() = " + findMember.getUsername());
 
             tx.commit(); // 커밋 시점에 INSERT (버퍼링 가능)
         } catch (Exception e) {
