@@ -1,6 +1,7 @@
 package hellojpa;
 
 import jakarta.persistence.*;
+import org.hibernate.Hibernate;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -32,12 +33,14 @@ public class JpaMain {
             Member refMember = em.getReference(Member.class, member1.getId());
             System.out.println("refMember.getClass() = " + refMember.getClass()); // Proxy
 
-            em.detach(refMember); // 준영속 상태로 만듦
-            // em.close();
-            // em.clear();
+            // 프록시 인스턴스의 초기화 여부 확인
+            System.out.println("isLoaded = " + emf.getPersistenceUnitUtil().isLoaded(refMember));
+            refMember.getUsername(); // 강제 초기화
+//            Hibernate.initialize(refMember); // 강제 초기화 (Hibernate가 제공하는 것, JPA 표준에는 없음)
+            System.out.println("isLoaded = " + emf.getPersistenceUnitUtil().isLoaded(refMember));
 
-            // could not initialize proxy [hellojpa.Member#1] - no Session
-            refMember.getUsername(); // 영속 컨텍스트에서 관리받지 못하게 됨
+            // 프록시 클래스 확인 방법
+            System.out.println("refMember.getClass() = " + refMember.getClass());
 
             tx.commit(); // 커밋 시점에 INSERT (버퍼링 가능)
         } catch (Exception e) {
