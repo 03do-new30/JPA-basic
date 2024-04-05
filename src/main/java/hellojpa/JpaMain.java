@@ -41,15 +41,22 @@ public class JpaMain {
             // 값 타입 컬렉션들은 지연 로딩
             Member findMember = em.find(Member.class, member.getId()); // Member에서만 조회 - 지연 로딩
 
-            List<Address> addressHistory = findMember.getAddressHistory(); // ADDRESS 쿼리
-            for (Address address : addressHistory) {
-                System.out.println("address.getCity() = " + address.getCity());
-            }
+            // homeCity -> newCity
+            Address a = findMember.getHomeAddress();
+            findMember.setHomeAddress(new Address("newCity", a.getStreet(), a.getZipcode()));
 
-            Set<String> favoriteFoods = findMember.getFavoriteFoods(); // FAVORITE_FOOD 쿼리
-            for (String favoriteFood : favoriteFoods) {
-                System.out.println("favoriteFood = " + favoriteFood);
-            }
+            // 값 타입 컬렉션 수정
+            // 치킨 -> 한식
+            // String 자체가 값타입. 업데이트라는게 없고 갈아끼워야함
+            findMember.getFavoriteFoods().remove("치킨"); // DELETE query
+            findMember.getFavoriteFoods().add("한식"); // INSERT query
+
+            // old1 -> new1
+            // remove시 equals로 비교해서 같은 인스턴스 지우기때문에
+            // old1과 완전히 똑같은 인스턴스를 만들어주고 지운다
+            // equlas와 hashCode가 제대로 구현되어있어야 한다
+            findMember.getAddressHistory().remove(new Address("old1", "street", "10000"));
+            findMember.getAddressHistory().add(new Address("newCity1", "street", "10000"));
 
             tx.commit(); // 커밋 시점에 INSERT (버퍼링 가능)
         } catch (Exception e) {
