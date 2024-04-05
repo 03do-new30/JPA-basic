@@ -26,8 +26,8 @@ public class JpaMain {
             parent.addChild(child2);
 
             em.persist(parent);
-            em.persist(child1);
-            em.persist(child2);
+//            em.persist(child1);
+//            em.persist(child2);
 
             tx.commit(); // 커밋 시점에 INSERT (버퍼링 가능)
         } catch (Exception e) {
