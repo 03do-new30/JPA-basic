@@ -36,7 +36,8 @@ public class JpaMain {
 
             em.persist(member2);
 
-            member1.getHomeAddress().setCity("newCity");
+            // Address를 불변 객체로 만들어 side effect 원천 차단
+//            member1.getHomeAddress().setCity("newCity");
 
             tx.commit(); // 커밋 시점에 INSERT (버퍼링 가능)
         } catch (Exception e) {
