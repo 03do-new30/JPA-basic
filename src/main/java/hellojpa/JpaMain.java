@@ -5,6 +5,7 @@ import org.hibernate.Hibernate;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 public class JpaMain {
 
@@ -32,6 +33,23 @@ public class JpaMain {
 
             // 값 타입 컬렉션의 라이프사이클이 멤버에 의존
             em.persist(member);
+
+            em.flush();
+            em.clear();
+
+            System.out.println("========== START ==========");
+            // 값 타입 컬렉션들은 지연 로딩
+            Member findMember = em.find(Member.class, member.getId()); // Member에서만 조회 - 지연 로딩
+
+            List<Address> addressHistory = findMember.getAddressHistory(); // ADDRESS 쿼리
+            for (Address address : addressHistory) {
+                System.out.println("address.getCity() = " + address.getCity());
+            }
+
+            Set<String> favoriteFoods = findMember.getFavoriteFoods(); // FAVORITE_FOOD 쿼리
+            for (String favoriteFood : favoriteFoods) {
+                System.out.println("favoriteFood = " + favoriteFood);
+            }
 
             tx.commit(); // 커밋 시점에 INSERT (버퍼링 가능)
         } catch (Exception e) {
