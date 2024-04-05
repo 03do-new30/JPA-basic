@@ -27,17 +27,10 @@ public class JpaMain {
 
             em.persist(member1);
 
-            // 값 타입 복사해서 사용
-            Address copyAddress = new Address(address.getCity(), address.getStreet(), address.getZipcode());
-
-            Member member2 = new Member();
-            member2.setUsername("member2");
-            member2.setHomeAddress(copyAddress);
-
-            em.persist(member2);
-
-            // Address를 불변 객체로 만들어 side effect 원천 차단
-//            member1.getHomeAddress().setCity("newCity");
+            // Address가 불변객체이면 member1의 주소는 어떻게 수정해?
+            // 이렇게 ^^
+            Address newAddress = new Address("NewCity", address.getStreet(), address.getZipcode());
+            member1.setHomeAddress(newAddress);
 
             tx.commit(); // 커밋 시점에 INSERT (버퍼링 가능)
         } catch (Exception e) {
