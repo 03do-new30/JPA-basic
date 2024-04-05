@@ -19,18 +19,19 @@ public class JpaMain {
 
         try {
 
-            Address address = new Address("city", "street", "1000");
+            Member member = new Member();
+            member.setUsername("member1");
+            member.setHomeAddress(new Address("homeCity", "street", "10000"));
 
-            Member member1 = new Member();
-            member1.setUsername("member1");
-            member1.setHomeAddress(address);
+            member.getFavoriteFoods().add("치킨");
+            member.getFavoriteFoods().add("족발");
+            member.getFavoriteFoods().add("피자");
 
-            em.persist(member1);
+            member.getAddressHistory().add(new Address("old1", "street", "10000"));
+            member.getAddressHistory().add(new Address("old2", "street", "10000"));
 
-            // Address가 불변객체이면 member1의 주소는 어떻게 수정해?
-            // 이렇게 ^^
-            Address newAddress = new Address("NewCity", address.getStreet(), address.getZipcode());
-            member1.setHomeAddress(newAddress);
+            // 값 타입 컬렉션의 라이프사이클이 멤버에 의존
+            em.persist(member);
 
             tx.commit(); // 커밋 시점에 INSERT (버퍼링 가능)
         } catch (Exception e) {
