@@ -56,7 +56,10 @@ public class JpaMain {
             // old1과 완전히 똑같은 인스턴스를 만들어주고 지운다
             // equlas와 hashCode가 제대로 구현되어있어야 한다
             findMember.getAddressHistory().remove(new Address("old1", "street", "10000"));
+            // 현재 지우는 데이터에 걸려있는 member id 관련된 모든 데이터를 싹 다 지운다
+
             findMember.getAddressHistory().add(new Address("newCity1", "street", "10000"));
+            // 컬렉션에 최종 남은 데이터들을 insert친다
 
             tx.commit(); // 커밋 시점에 INSERT (버퍼링 가능)
         } catch (Exception e) {
