@@ -19,12 +19,21 @@ public class JpaMain {
 
         try {
 
-            Member member = new Member();
-            member.setUsername("hello");
-            member.setHomeAddress(new Address("city", "street", "10000"));
-            member.setWorkPeriod(new Period());
+            Address address = new Address("city", "street", "1000");
 
-            em.persist(member);
+            Member member1 = new Member();
+            member1.setUsername("member1");
+            member1.setHomeAddress(address);
+
+            em.persist(member1);
+
+            Member member2 = new Member();
+            member2.setUsername("member2");
+            member2.setHomeAddress(address);
+
+            em.persist(member2);
+
+            member1.getHomeAddress().setCity("newCity"); // member2의 city도 변하는 부작용 발생
 
             tx.commit(); // 커밋 시점에 INSERT (버퍼링 가능)
         } catch (Exception e) {
