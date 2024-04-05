@@ -26,8 +26,14 @@ public class JpaMain {
             parent.addChild(child2);
 
             em.persist(parent);
-//            em.persist(child1);
-//            em.persist(child2);
+
+            em.flush();
+            em.clear();
+
+            Parent findParent = em.find(Parent.class, parent.getId());
+            findParent.getChildList().remove(0); // 첫번째 자식을 지워보자
+            // orphanRemoval = true이기 때문에
+            // childList 컬렉션에서 빠진 자식은 DB에서 삭제(DELETE)
 
             tx.commit(); // 커밋 시점에 INSERT (버퍼링 가능)
         } catch (Exception e) {
