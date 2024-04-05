@@ -18,33 +18,16 @@ public class JpaMain {
         tx.begin();
 
         try {
+            Child child1 = new Child();
+            Child child2 = new Child();
 
-            Team team1 = new Team();
-            team1.setName("teamA");
-            em.persist(team1);
+            Parent parent = new Parent();
+            parent.addChild(child1);
+            parent.addChild(child2);
 
-            Team team2 = new Team();
-            team2.setName("teamB");
-            em.persist(team2);
-
-            Member member1 = new Member();
-            member1.setUsername("member1");
-            member1.setTeam(team1);
-            em.persist(member1);
-
-            Member member2 = new Member();
-            member2.setUsername("member2");
-            member2.setTeam(team2);
-            em.persist(member2);
-
-            em.flush();
-            em.clear();
-
-//            Member m = em.find(Member.class, member1.getId());
-
-            // N + 1 PROBLEM 해결하는 JPQL
-            List<Member> members = em.createQuery("select m from Member m join fetch m.team", Member.class).getResultList();
-
+            em.persist(parent);
+            em.persist(child1);
+            em.persist(child2);
 
             tx.commit(); // 커밋 시점에 INSERT (버퍼링 가능)
         } catch (Exception e) {
