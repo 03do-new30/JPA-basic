@@ -18,33 +18,22 @@ public class JpaMain {
         tx.begin();
 
         try {
+            Child child1 = new Child();
+            Child child2 = new Child();
 
-            Team team1 = new Team();
-            team1.setName("teamA");
-            em.persist(team1);
+            Parent parent = new Parent();
+            parent.addChild(child1);
+            parent.addChild(child2);
 
-            Team team2 = new Team();
-            team2.setName("teamB");
-            em.persist(team2);
-
-            Member member1 = new Member();
-            member1.setUsername("member1");
-            member1.setTeam(team1);
-            em.persist(member1);
-
-            Member member2 = new Member();
-            member2.setUsername("member2");
-            member2.setTeam(team2);
-            em.persist(member2);
+            em.persist(parent);
 
             em.flush();
             em.clear();
 
-//            Member m = em.find(Member.class, member1.getId());
-
-            // N + 1 PROBLEM 해결하는 JPQL
-            List<Member> members = em.createQuery("select m from Member m join fetch m.team", Member.class).getResultList();
-
+            Parent findParent = em.find(Parent.class, parent.getId());
+            findParent.getChildList().remove(0); // 첫번째 자식을 지워보자
+            // orphanRemoval = true이기 때문에
+            // childList 컬렉션에서 빠진 자식은 DB에서 삭제(DELETE)
 
             tx.commit(); // 커밋 시점에 INSERT (버퍼링 가능)
         } catch (Exception e) {
