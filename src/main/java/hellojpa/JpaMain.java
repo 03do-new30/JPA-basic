@@ -19,6 +19,13 @@ public class JpaMain {
 
         try {
 
+            Member member = new Member();
+            member.setUsername("hello");
+            member.setHomeAddress(new Address("city", "street", "10000"));
+            member.setWorkPeriod(new Period());
+
+            em.persist(member);
+
             tx.commit(); // 커밋 시점에 INSERT (버퍼링 가능)
         } catch (Exception e) {
             tx.rollback();
