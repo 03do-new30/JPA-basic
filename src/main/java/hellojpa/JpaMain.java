@@ -19,28 +19,32 @@ public class JpaMain {
 
         try {
 
+            Team team1 = new Team();
+            team1.setName("teamA");
+            em.persist(team1);
+
+            Team team2 = new Team();
+            team2.setName("teamB");
+            em.persist(team2);
+
             Member member1 = new Member();
             member1.setUsername("member1");
+            member1.setTeam(team1);
             em.persist(member1);
 
             Member member2 = new Member();
             member2.setUsername("member2");
+            member2.setTeam(team2);
             em.persist(member2);
 
             em.flush();
-            em.clear(); // 영속성 컨텍스트 깔끔하게
+            em.clear();
 
-            Member refMember = em.getReference(Member.class, member1.getId());
-            System.out.println("refMember.getClass() = " + refMember.getClass()); // Proxy
+//            Member m = em.find(Member.class, member1.getId());
 
-            // 프록시 인스턴스의 초기화 여부 확인
-            System.out.println("isLoaded = " + emf.getPersistenceUnitUtil().isLoaded(refMember));
-            refMember.getUsername(); // 강제 초기화
-//            Hibernate.initialize(refMember); // 강제 초기화 (Hibernate가 제공하는 것, JPA 표준에는 없음)
-            System.out.println("isLoaded = " + emf.getPersistenceUnitUtil().isLoaded(refMember));
+            // N + 1 PROBLEM 해결하는 JPQL
+            List<Member> members = em.createQuery("select m from Member m join fetch m.team", Member.class).getResultList();
 
-            // 프록시 클래스 확인 방법
-            System.out.println("refMember.getClass() = " + refMember.getClass());
 
             tx.commit(); // 커밋 시점에 INSERT (버퍼링 가능)
         } catch (Exception e) {
