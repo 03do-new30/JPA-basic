@@ -1,6 +1,9 @@
 package hellojpa;
 
 import jakarta.persistence.*;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 import org.hibernate.Hibernate;
 
 import java.time.LocalDateTime;
@@ -19,26 +22,8 @@ public class JpaMain {
         tx.begin();
 
         try {
-
-            Member member = new Member();
-            member.setUsername("member1");
-            member.setHomeAddress(new Address("homeCity", "street", "10000"));
-
-            member.getFavoriteFoods().add("치킨");
-            member.getFavoriteFoods().add("족발");
-            member.getFavoriteFoods().add("피자");
-
-            member.getAddressHistory().add(new AddressEntity("old1", "street", "10000"));
-            member.getAddressHistory().add(new AddressEntity("old2", "street", "10000"));
-
-            // 값 타입 컬렉션의 라이프사이클이 멤버에 의존
-            em.persist(member);
-
-            em.flush();
-            em.clear();
-
-            System.out.println("========== START ==========");
-            Member findMember = em.find(Member.class, member.getId());
+            em.createNativeQuery("select MEMBER_ID, city, street, zipcode, USERNAME from MEMBER")
+                    .getResultList();
 
             tx.commit(); // 커밋 시점에 INSERT (버퍼링 가능)
         } catch (Exception e) {
